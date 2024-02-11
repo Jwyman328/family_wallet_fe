@@ -1,24 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { ApiClient } from "./api/api";
 
 function App() {
+  const getBalance = async () => {
+    const handleError = () => {
+      console.log("error");
+    };
+    const response = await ApiClient.getBalance(handleError);
+    console.log("right before setting",response.total);
+    setCurrentBalance(response.total);
+    console.log(response);
+  };
+  const [currentBalance, setCurrentBalance] = useState(0);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="mt-4">
+      <div className="mt-4 text-red-400"> Welcome to the family wallet </div>
+      <button onClick={getBalance}>Click me</button>
+      <p>{currentBalance} sats</p>
     </div>
   );
 }
