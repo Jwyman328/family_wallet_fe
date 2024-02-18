@@ -29,8 +29,14 @@ function App() {
       <button onClick={getBalance}>get utxo balance</button>
       <p>{currentBalance} sats</p>
 
-      <button onClick={getUxtos}>get utxos</button>
-      <button onClick={getUxtoFees}>get utxo fees</button>
+      <div>
+        <button className="border rounded border-black" onClick={getUxtos}>
+          get utxos
+        </button>
+      </div>
+      <button className="border rounded border-black" onClick={getUxtoFees}>
+        get utxo fees
+      </button>
     </div>
   );
 }
