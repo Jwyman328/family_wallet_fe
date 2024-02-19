@@ -1,50 +1,34 @@
-// TODO use react query
+import { GetUtxosResponseType, GetBalanceResponseType } from "./types";
+async function fetchHandler(url: string) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  return response;
+}
+
 export class ApiClient {
-  static async getBalance(onError: () => void) {
-    try {
-      const response = await fetch("http://localhost:5011/balance");
+  static async getBalance() {
+    const response = await fetchHandler("http://localhost:5011/balance");
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      console.log("right after awaiting", data);
-      return data;
-    } catch (error) {
-      onError();
-      console.error("There was a problem with the fetch operation:", error);
-    }
+    const data = await response.json();
+    return data as GetBalanceResponseType;
   }
-  static async getUtxos(onError: () => void) {
-    try {
-      const response = await fetch("http://localhost:5011/utxos");
+  static async getUtxos() {
+    const response = await fetchHandler("http://localhost:5011/utxos");
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+    const data = await response.json();
 
-      const data = await response.json();
-
-      return data;
-    } catch (error) {
-      onError();
-      console.error("There was a problem with the fetch operation:", error);
-    }
+    return data as GetUtxosResponseType;
   }
-  static async getUtxoFee(onError: () => void) {
-    try {
-      const response = await fetch("http://localhost:5011/utxos/fees");
+  static async getUtxoFee(txId: string, vout: number, feeRate: number = 1) {
+    const response = await fetchHandler(
+      `http://localhost:5011/utxos/fees/${txId}/${vout}?feeRate=${feeRate}`,
+    );
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      onError();
-      console.error("There was a problem with the fetch operation:", error);
-    }
+    const data = await response.json();
+    return data;
   }
 }

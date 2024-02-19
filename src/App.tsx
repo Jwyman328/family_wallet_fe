@@ -1,42 +1,31 @@
 import React, { useState } from "react";
-import { ApiClient } from "./api/api";
-
+import { UtxosDisplay } from "./components/utxosDisplay";
+import { useGetBalance, useGetUtxoFee, useGetUtxos } from "./hooks/utxos";
 // use a component libary for ui components
 function App() {
-  const getBalance = async () => {
-    const handleError = () => {
-      console.log("error");
-    };
-    const response = await ApiClient.getBalance(handleError);
-    setCurrentBalance(response.total);
-  };
-  const getUxtos = async () => {
-    const handleError = () => {
-      console.log("error");
-    };
-    const response = await ApiClient.getUtxos(handleError);
-  };
-  const getUxtoFees = async () => {
-    const handleError = () => {
-      console.log("error");
-    };
-    const response = await ApiClient.getUtxoFee(handleError);
-  };
-  const [currentBalance, setCurrentBalance] = useState(0);
+  const getBalanceQueryRequest = useGetBalance();
+  const getUtxosQueryRequest = useGetUtxos();
+
+  const [feeRate, setFeeRate] = useState(1);
   return (
     <div className="mt-4">
       <div className="mt-4 text-red-400"> Welcome to the family wallet </div>
-      <button onClick={getBalance}>get utxo balance</button>
-      <p>{currentBalance} sats</p>
-
-      <div>
-        <button className="border rounded border-black" onClick={getUxtos}>
-          get utxos
-        </button>
-      </div>
-      <button className="border rounded border-black" onClick={getUxtoFees}>
+      <p>{getBalanceQueryRequest?.data?.total} sats</p>
+      <button className="border rounded border-black" onClick={() => {}}>
         get utxo fees
       </button>
+      <p>fee rate</p>
+      <input
+        type="number"
+        value={feeRate}
+        onChange={(e) => setFeeRate(parseInt(e.target.value))}
+      />
+      {getUtxosQueryRequest.isSuccess ? (
+        <UtxosDisplay
+          feeRate={feeRate}
+          utxos={getUtxosQueryRequest?.data?.utxos}
+        />
+      ) : null}
     </div>
   );
 }
