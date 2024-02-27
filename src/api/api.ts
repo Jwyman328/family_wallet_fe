@@ -1,6 +1,9 @@
 import { GetUtxosResponseType, GetBalanceResponseType } from "./types";
-async function fetchHandler(url: string) {
-  const response = await fetch(url);
+async function fetchHandler(url: string, method = "GET", body?: any) {
+  const response = await fetch(url, {
+    method: method,
+    body: JSON.stringify(body),
+  });
 
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -8,6 +11,11 @@ async function fetchHandler(url: string) {
 
   return response;
 }
+
+export type UtxoRequestParam = {
+  id: string;
+  vout: number;
+};
 
 export class ApiClient {
   static async getBalance() {
@@ -23,9 +31,11 @@ export class ApiClient {
 
     return data as GetUtxosResponseType;
   }
-  static async getUtxoFee(txId: string, vout: number, feeRate: number = 1) {
+  static async createTxFeeEstimation(utxos: UtxoRequestParam[], feeRate: number = 1) {
     const response = await fetchHandler(
-      `http://localhost:5011/utxos/fees/${txId}/${vout}?feeRate=${feeRate}`,
+      `http://localhost:5011/utxos/fees?feeRate=${feeRate}`,
+      "POST",
+      utxos,
     );
 
     const data = await response.json();

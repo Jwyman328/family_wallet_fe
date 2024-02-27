@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { UtxosDisplay } from "./components/utxosDisplay";
-import { useGetBalance, useGetUtxoFee, useGetUtxos } from "./hooks/utxos";
+import { useGetBalance, useGetUtxos } from "./hooks/utxos";
 // use a component libary for ui components
 function App() {
   const getBalanceQueryRequest = useGetBalance();
