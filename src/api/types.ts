@@ -13,3 +13,9 @@ export type GetBalanceResponseType = {
   spendable: number;
   total: number;
 };
+
+export type CurrentFeesResponseType = {
+  low: number;
+  medium: number;
+  high: number;
+};

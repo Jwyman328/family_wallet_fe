@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { UtxosDisplay } from "./components/utxosDisplay";
-import { useGetBalance, useGetUtxos } from "./hooks/utxos";
+import { CurrentFeeRates } from "../components/currentFeeRates";
+import { UtxosDisplay } from "../components/utxosDisplay";
+import { useGetBalance, useGetUtxos } from "../hooks/utxos";
 // use a component libary for ui components
-function App() {
+function Home() {
   const getBalanceQueryRequest = useGetBalance();
   const getUtxosQueryRequest = useGetUtxos();
 
@@ -11,6 +12,7 @@ function App() {
     <div className="mt-4">
       <div className="mt-4 text-red-400"> Welcome to the family wallet </div>
       <p>{getBalanceQueryRequest?.data?.total} sats</p>
+      <CurrentFeeRates />
       <button className="border rounded border-black" onClick={() => {}}>
         get utxo fees
       </button>
@@ -30,4 +32,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

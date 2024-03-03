@@ -1,4 +1,8 @@
-import { GetUtxosResponseType, GetBalanceResponseType } from "./types";
+import {
+  GetUtxosResponseType,
+  GetBalanceResponseType,
+  CurrentFeesResponseType,
+} from "./types";
 async function fetchHandler(url: string, method = "GET", body?: any) {
   const response = await fetch(url, {
     method: method,
@@ -12,6 +16,7 @@ async function fetchHandler(url: string, method = "GET", body?: any) {
   return response;
 }
 
+// TODO move to types file
 export type UtxoRequestParam = {
   id: string;
   vout: number;
@@ -31,7 +36,10 @@ export class ApiClient {
 
     return data as GetUtxosResponseType;
   }
-  static async createTxFeeEstimation(utxos: UtxoRequestParam[], feeRate: number = 1) {
+  static async createTxFeeEstimation(
+    utxos: UtxoRequestParam[],
+    feeRate: number = 1,
+  ) {
     const response = await fetchHandler(
       `http://localhost:5011/utxos/fees?feeRate=${feeRate}`,
       "POST",
@@ -40,5 +48,11 @@ export class ApiClient {
 
     const data = await response.json();
     return data;
+  }
+
+  static async getCurrentFees() {
+    const response = await fetchHandler("http://localhost:5011/fees/current");
+    const data = await response.json();
+    return data as CurrentFeesResponseType;
   }
 }

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "react-query";
 const queryKeys = {
   getBalance: ["getBalance"],
   getUtxos: ["getUtxos"],
+  getCurrentFees: ["getCurrentFees"],
 };
 
 export function useGetBalance() {
@@ -17,4 +18,8 @@ export function useCreateTxFeeEstimate(
   feeRate: number,
 ) {
   return useMutation(() => ApiClient.createTxFeeEstimation(utxos, feeRate));
+}
+
+export function useGetCurrentFees() {
+  return useQuery(queryKeys.getCurrentFees, () => ApiClient.getCurrentFees());
 }
